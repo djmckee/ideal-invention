@@ -7,6 +7,9 @@ var Country = require('./models/Country.js');
 var Migration = require('./models/Migration.js');
 var GDPValue = require('./models/GDPValue.js');
 
+let MIN_GDP_YEAR = 1960;
+let MAX_GDP_YEAR = 2014;
+
 module.exports = {
     import: function() {
         // Import gdp.csv and migration.csv into MongoDB...
@@ -14,8 +17,7 @@ module.exports = {
         var migrationCsvData = fs.readFileSync("migration.csv");
 
         var gdpDataParse = parse(gdpCsvData, {columns: true});
-        //console.log(gdpDataParse);
-
+        console.log(gdpDataParse);
 
         var migrationDataParse = parse(migrationCsvData, {columns: true});
         //console.log(migrationDataParse);
@@ -71,6 +73,28 @@ module.exports = {
 
             promise.then(function (obj) {
                 console.log('Added migration to database: ' + JSON.stringify(obj));
+            });
+
+        });
+
+        var gdpYears = [];
+        for (var i = MIN_GDP_YEAR; i <= MAX_GDP_YEAR; i++) {
+            gdpYears.push(i);
+        }
+
+        // And add GDP to database....
+        gdpDataParse.forEach(function(gdp){
+            let gdpCountryName = gdp["country name"];
+            gdpYears.forEach(function(year){
+                var stringYear = String(year);
+                var yearFigureString = gdp[stringYear];
+                var yearGrowthNumber = Number(yearFigureString);
+                var gdpValue = {year: year, country: gdpCountryName, growth: yearGrowthNumber};
+                var promise = GDPValue.create(gdpValue);
+
+                promise.then(function (obj) {
+                    console.log('Added gdp to database: ' + JSON.stringify(obj));
+                });
             });
 
         });
