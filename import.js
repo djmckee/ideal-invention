@@ -64,39 +64,14 @@ module.exports = {
             var fromName = migration.origin;
 
 
-            Year.findOne({ 'year': migrationYear }, '_id', function yearFound(err, matchedYear) {
-                if (err) throw err;
+            var newMigration = {year: migrationYear, refugees: migration.refugees, total: migration.total, toCountry: countryName, fromCountry: fromName};
+            console.log('Adding migration to database: ' + JSON.stringify(newMigration));
 
-                Country.findOne({ 'name': countryName }, '_id', function matchedToCountryFound(err, matchedToCountry) {
-                    if (err) throw err;
+            var promise = Migration.create(newMigration);
 
-                    Country.findOne({ 'name': fromName }, '_id', function matchedFromCountryFound(err, matchedFromCountry) {
-                        if (err) throw err;
-
-                        if (matchedYear && matchedToCountry && matchedFromCountry) {
-                            var newMigration = {year: matchedYear._id, refugees: migration.refugees, total: migration.total, toCountry: matchedToCountry._id, fromCountry: matchedFromCountry._id};
-
-                            Migration.create(newMigration, function migrationInserted (err, obj) {
-                                if (err) throw err;
-                                console.log('Added migration to database: ' + JSON.stringify(obj));
-
-
-                            });
-                        } else {
-                            var newMigration = {year: matchedYear._id, refugees: migration.refugees, total: migration.total, toCountry: matchedToCountry._id, fromCountry: matchedFromCountry._id};
-
-                            var logStr = 'Could not add migration to database: ' + JSON.stringify(newMigration);
-                            console.log(logStr);
-
-                            throw {name : "Could not insert migration", message : logStr};
-                        }
-
-                    });
-
-                });
+            promise.then(function (obj) {
+                console.log('Added migration to database: ' + JSON.stringify(obj));
             });
-
-
 
         });
 
