@@ -13,7 +13,7 @@ router.get('/', function(req, res, next) {
         if (!err){
 
             // TODO: Ensure first countries to compare are from Syria to UK!!!
-            res.render('index', { title: 'Refugee, migrant and GDP data comparison', countries: countries});
+            res.render('index', { title: 'Data in Crisis', countries: countries});
 
         } else {throw err;}
     });

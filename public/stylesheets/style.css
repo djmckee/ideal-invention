@@ -1,9 +1,15 @@
 body {
   padding: 50px;
   font-family: "Raleway", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  
+
 }
 
 a {
   color: #00B7FF;
+}
+
+
+tr:hover {
+    background-color: #eee;
+
 }

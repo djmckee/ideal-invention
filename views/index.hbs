@@ -1,48 +1,53 @@
 <h1>{{title}}</h1>
+<h4><strong>Refugee, migrant and GDP data comparison</strong></h4>
+<h5>Choose a country to track migration and refugee movement to and a from to begin...</h5>
 <form>
-  <div class="row">
-    <div class="six columns">
+    <div class="row">
+        <div class="six columns">
+            <label for="fromCountryDropdown">From</label>
+            <select id="fromCountryDropdown" name="fromCountryDropdown" class="form-control">
+                {{#countries}}
+                <option value="{{this._id}}">{{this.name}}</option>
+                {{/countries}}
+            </select>
+        </div>
 
+        <div class="six columns">
+            <label for="toCountryDropdown">To</label>
+            <select id="toCountryDropdown" name="toCountryDropdown" class="form-control">
+                {{#countries}}
+                <option value="{{this._id}}">{{this.name}}</option>
+                {{/countries}}
+            </select>
+        </div>
 
-        <label for="fromCountryDropdown">From</label>
-    <select id="fromCountryDropdown" name="fromCountryDropdown" class="form-control">
-        {{#countries}}
-            <option value="{{this._id}}">{{this.name}}</option>
-        {{/countries}}
-    </select>
-</div>
+    </div>
 
-<div class="six columns">
+    <div class="row">
+        <div class="chart-container">
 
-    <label for="toCountryDropdown">To</label>
-    <select id="toCountryDropdown" name="toCountryDropdown" class="form-control">
-        {{#countries}}
-            <option value="{{this._id}}">{{this.name}}</option>
-        {{/countries}}
-    </select>
-</div>
+        </div>
+    </div>
 
-<div class="chart-container">
-
-</div>
-
-<div class="table-container">
-    <table class="table u-full-width">
-        <thead>
-          <tr>
-            <th>Year</th>
-            <th>Refugees</th>
-            <th>Total migrants</th>
-            <th>∆GDP %</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr class="table-entry">
-            <td>2014</td>
-            <td>2000</td>
-            <td>20000</td>
-            <td>1.22323</td>
-          </tr>
-        </tbody>
-      </table>
-</div>
+    <div class="row">
+        <div class="table-container">
+            <table class="table u-full-width">
+                <thead>
+                    <tr>
+                        <th>Year</th>
+                        <th>Refugees</th>
+                        <th>Total migrants</th>
+                        <th>∆GDP %</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="table-entry">
+                        <td>2014</td>
+                        <td>2000</td>
+                        <td>20000</td>
+                        <td>1.22323</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
