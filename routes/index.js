@@ -22,7 +22,7 @@ router.get('/', function(req, res, next) {
 });
 
 /* GET migration vs GDP data for the user's current selection. */
-router.get('/', function(req, res, next) {
+router.get('/get_data', function(req, res, next) {
     // TODO: Implement some clever stuff.
 
     res.json({});
