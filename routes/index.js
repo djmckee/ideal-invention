@@ -9,7 +9,7 @@ var GDPValue = require('../models/GDPValue.js');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-    Country.find({}, function(err, countries) {
+    Country.find().sort([['name', 'ascending']]).exec(function(err, countries) {
         if (!err){
 
             // TODO: Ensure first countries to compare are from Syria to UK!!!
@@ -17,6 +17,8 @@ router.get('/', function(req, res, next) {
 
         } else {throw err;}
     });
+
+
 });
 
 /* GET migration vs GDP data for the user's current selection. */

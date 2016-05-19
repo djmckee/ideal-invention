@@ -2,7 +2,7 @@
 <div class="input-group">
 
     <span class="input-group-addon" id="basic-addon1">From</span>
-    <select name="fromCountryDropdown" class="form-control">
+    <select id="fromCountryDropdown" name="fromCountryDropdown" class="form-control">
         {{#countries}}
             <option value="{{this._id}}">{{this.name}}</option>
         {{/countries}}
@@ -12,7 +12,7 @@
 <div class="input-group">
 
     <span class="input-group-addon" id="basic-addon2">To</span>
-    <select name="toCountryDropdown" class="form-control">
+    <select id="toCountryDropdown" name="toCountryDropdown" class="form-control">
         {{#countries}}
             <option value="{{this._id}}">{{this.name}}</option>
         {{/countries}}
