@@ -25,6 +25,7 @@ module.exports = {
         var yearsArray = [];
         var countryNames = [];
 
+        // Iterate through the migration data
         for (var i = 0; i < migrationDataParse.length; i++) {
             var migration = migrationDataParse[i];
             var migrationYearString = migration.year;
@@ -65,13 +66,12 @@ module.exports = {
             var countryName = migration.country;
             var fromName = migration.origin;
 
-
             var newMigration = {year: migrationYear, refugees: migration.refugees, total: migration.total, toCountry: countryName, fromCountry: fromName};
             console.log('Adding migration to database: ' + JSON.stringify(newMigration));
 
             var promise = Migration.create(newMigration);
 
-            promise.then(function (obj) {
+            promise.then(function(obj) {
                 console.log('Added migration to database: ' + JSON.stringify(obj));
             });
 
@@ -92,7 +92,7 @@ module.exports = {
                 var gdpValue = {year: year, country: gdpCountryName, growth: yearGrowthNumber};
                 var promise = GDPValue.create(gdpValue);
 
-                promise.then(function (obj) {
+                promise.then(function(obj) {
                     console.log('Added gdp to database: ' + JSON.stringify(obj));
                 });
             });

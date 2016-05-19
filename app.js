@@ -7,7 +7,6 @@ var bodyParser = require('body-parser');
 var argv = require('yargs').argv;
 var fs = require('fs');
 var routes = require('./routes/index');
-var users = require('./routes/users');
 
 var app = express();
 var importer = require('./import.js');
@@ -34,7 +33,6 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
-app.use('/users', users);
 
 if (argv.import != null) {
     // Import dataset...

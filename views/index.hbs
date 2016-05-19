@@ -1,2 +1,45 @@
 <h1>{{title}}</h1>
-<p>Welcome to {{title}}</p>
+<div class="input-group">
+
+    <span class="input-group-addon" id="basic-addon1">From</span>
+    <select name="fromCountryDropdown" class="form-control">
+        {{#countries}}
+            <option value="{{this._id}}">{{this.name}}</option>
+        {{/countries}}
+    </select>
+</div>
+
+<div class="input-group">
+
+    <span class="input-group-addon" id="basic-addon2">To</span>
+    <select name="toCountryDropdown" class="form-control">
+        {{#countries}}
+            <option value="{{this._id}}">{{this.name}}</option>
+        {{/countries}}
+    </select>
+</div>
+
+<div class="chart-container">
+
+</div>
+
+<div class="table-container">
+    <table class="table table-bordered table-hover">
+        <thead>
+          <tr>
+            <th>Year</th>
+            <th>Refugees</th>
+            <th>Total migrants</th>
+            <th>∆GDP %</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="table-entry">
+            <td>2014</td>
+            <td>2000</td>
+            <td>20000</td>
+            <td>1.22323</td>
+          </tr>
+        </tbody>
+      </table>
+</div>
