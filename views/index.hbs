@@ -1,7 +1,10 @@
 <h1>{{title}}</h1>
-<div class="input-group">
+<form>
+  <div class="row">
+    <div class="six columns">
 
-    <span class="input-group-addon" id="basic-addon1">From</span>
+
+        <label for="fromCountryDropdown">From</label>
     <select id="fromCountryDropdown" name="fromCountryDropdown" class="form-control">
         {{#countries}}
             <option value="{{this._id}}">{{this.name}}</option>
@@ -9,9 +12,9 @@
     </select>
 </div>
 
-<div class="input-group">
+<div class="six columns">
 
-    <span class="input-group-addon" id="basic-addon2">To</span>
+    <label for="toCountryDropdown">To</label>
     <select id="toCountryDropdown" name="toCountryDropdown" class="form-control">
         {{#countries}}
             <option value="{{this._id}}">{{this.name}}</option>
@@ -24,7 +27,7 @@
 </div>
 
 <div class="table-container">
-    <table class="table table-bordered table-hover">
+    <table class="table u-full-width">
         <thead>
           <tr>
             <th>Year</th>
