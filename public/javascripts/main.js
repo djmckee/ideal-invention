@@ -47,11 +47,11 @@ $(document).ready(function() {
             },
             labels: labels,
             datasets: [{
-                label: "At risk countries",
+                label: "Improving countries",
                 backgroundColor: "rgba(46, 204, 113,1.0)",
                 data: negativeCountries
             }, {
-                label: "Improving countries",
+                label: "At risk countries",
                 backgroundColor: "rgba(192, 57, 43,1.0)",
                 data: positiveCountries
 
