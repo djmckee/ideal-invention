@@ -15,4 +15,4 @@ Created by [Dylan McKee](http://dylan.ninja), [Alex Birch](https://twitter.com/a
 - [Chart.js](http://www.chartjs.org/)
 - A whole host of NPM dependencies as defined in the `package.json` file - a run of `sudo npm install` in the directory you clone this into should do the trick.
 
-
+`node app.js --import` imports the data from the CSV files into MongoDB.
