@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var Set = require("collections/set");
 
 var Year = require('../models/Year.js');
 var Country = require('../models/Country.js');
@@ -7,15 +8,83 @@ var Migration = require('../models/Migration.js');
 var GDPValue = require('../models/GDPValue.js');
 var GDPMigrationObject = require('../models/GDPMigrationObject.js');
 
+let YEAR_DELTA = 2;
+let LATEST_YEAR = 2014;
+let INITIAL_YEAR = LATEST_YEAR - YEAR_DELTA;
+
 /* GET home page. */
 router.get('/', function(req, res, next) {
-    Country.find().sort([['name', 'ascending']]).exec(function(err, countries) {
-        if (!err){
+    Country.find({}, function(err, countries) {
+        Migration.find({year: INITIAL_YEAR}, function(err, fromYears) {
+            Migration.find({year: LATEST_YEAR}, function(err, toYears) {
+                    var idpScores = [];
 
-            // TODO: Ensure first countries to compare are from Syria to UK!!!
-            res.render('index', { title: 'Data in Crisis', countries: countries});
+                    var max = 1;
+                    var min = 0;
 
-        } else {throw err;}
+                    countries.forEach(function(country) {
+                        var idpData = {};
+
+                        idpData.name = country.name;
+                        idpData.id = country._id;
+
+                        var idpScore = 0.0;
+
+
+                        var currentMigrationData = getMigrationForCountry(toYears, country.name);
+                        var prevMigrationData = getMigrationForCountry(fromYears, country.name);
+
+                        if (currentMigrationData && prevMigrationData) {
+                            idpScore = (currentMigrationData.net_idp - prevMigrationData.net_idp);
+
+                        } else {
+                            idpData.noData = true;
+                        }
+
+                        if (idpScore > max) {
+                            max = idpScore;
+                        }
+
+                        if (idpScore < min) {
+                            min = idpScore;
+                        }
+
+
+                        idpData.score = idpScore;
+
+                        idpScores.push(idpData);
+                    });
+
+                    idpScores.forEach(function(score) {
+                        if (score.score > 0) {
+                            score.score = (score.score / max);
+                        } else {
+                            score.score = (score.score / (min * -1));
+                        }
+                    });
+
+                    var data = [];
+                    for (var i = 0; i < idpScores.length; i++) {
+                        var score = idpScores[i];
+                        if (!score.noData) {
+                            data.push(score);
+                        }
+                    }
+
+                    idpScores = data;
+
+                    idpScores = idpScores.sort(function(a, b) {
+                        return b.score - a.score;
+                    });
+
+
+                    //res.json(idpScores);
+
+
+                    res.render('index', { title: 'Data in Crisis', idpScores: idpScores});
+
+            });
+        });
     });
 
 
@@ -25,64 +94,88 @@ router.get('/', function(req, res, next) {
 router.get('/get_data', function(req, res, next) {
     // TODO: Implement some clever stuff.
 
-    var fromCountryId = req.query.fromCountryId;
-    var toCountryId = req.query.toCountryId;
-    Country.findById(fromCountryId, function (err, fromCountry) {
-        Country.findById(toCountryId, function (err, toCountry) {
-            // Fetch GDPs...
-            GDPValue.find({country: toCountry.name}, function(err, gdpValues) {
-                if (!err){
-                    // Fetch migration data...
+    Country.find({}, function(err, countries) {
+        Migration.find({year: INITIAL_YEAR}, function(err, fromYears) {
+            Migration.find({year: LATEST_YEAR}, function(err, toYears) {
+                    var idpScores = [];
 
-                    Migration.find({toCountry: toCountry.name, fromCountry: fromCountry.name}, function(err, migrationValues) {
-                        if (!err){
-                            // Stitch together migration and gdp values...
-                            var array = [];
+                    var max = 1;
+                    var min = 0;
 
-                            gdpValues.forEach(function(value){
-                                var migrationData = findMigrationForYear(migrationValues, value.year);
+                    countries.forEach(function(country) {
+                        var idpData = {};
 
-                                var refugeeFigure = 0;
-                                var migrantTotalFigure = 0;
+                        idpData.name = country.name;
+                        idpData.id = country._id;
 
-                                if (migrationData != null) {
-                                    refugeeFigure = migrationData.refugees;
-                                    migrantTotalFigure = migrationData.total;
-                                }
+                        var idpScore = 0.0;
 
-                                var object = new GDPMigrationObject(value.year, refugeeFigure, migrantTotalFigure, value.growth);
 
-                                array.push(object);
+                        var currentMigrationData = getMigrationForCountry(toYears, country.name);
+                        var prevMigrationData = getMigrationForCountry(fromYears, country.name);
 
-                            });
-
-                            res.json(array);
+                        if (currentMigrationData && prevMigrationData) {
+                            idpScore = (currentMigrationData.net_idp - prevMigrationData.net_idp);
 
                         } else {
-                            throw err;
+                            idpData.noData = true;
+                        }
+
+                        if (idpScore > max) {
+                            max = idpScore;
+                        }
+
+                        if (idpScore < min) {
+                            min = idpScore;
+                        }
+
+
+                        idpData.score = idpScore;
+
+                        idpScores.push(idpData);
+                    });
+
+                    idpScores.forEach(function(score) {
+                        if (score.score > 0) {
+                            score.score = (score.score / max);
+                        } else {
+                            score.score = (score.score / (min * -1));
                         }
                     });
 
-                } else {
-                    throw err;
-                }
+                    var data = [];
+                    for (var i = 0; i < idpScores.length; i++) {
+                        var score = idpScores[i];
+                        if (!score.noData) {
+                            data.push(score);
+                        }
+                    }
+
+                    idpScores = data;
+
+                    idpScores = idpScores.sort(function(a, b) {
+                        return b.score - a.score;
+                    });
+
+
+                    res.json(idpScores);
             });
         });
     });
 
 });
 
+function getMigrationForCountry(countries, countryName) {
+    var data = null;
 
-function findMigrationForYear(migrations, year) {
-    var migration = null;
-
-    migrations.forEach(function(value){
-        if (value.year == year) {
-            migration = value;
+    countries.forEach(function(item){
+        if (item.country == countryName) {
+            data = item;
         }
     });
 
-    return migration;
+    return data;
+
 }
 
 module.exports = router;

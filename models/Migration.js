@@ -1,10 +1,13 @@
 var mongoose = require('mongoose');
 
 var Migration = new mongoose.Schema({
-  refugees: Number,
+  idp: Number,
+  returned_idp: Number,
+  stateless: Number,
+  others: Number,
+  net_idp: Number,
   total: Number,
-  toCountry: String,
-  fromCountry: String,
+  country: String,
   year: Number
 });
 
