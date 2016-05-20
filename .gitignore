@@ -30,6 +30,4 @@ node_modules
 npm-debug.log
 
 
-gdp.csv
-migration.csv
 constants.js
