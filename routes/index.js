@@ -61,6 +61,9 @@ router.get('/', function(req, res, next) {
                         } else {
                             score.score = (score.score / (min * -1));
                         }
+
+                        score.score = score.score.toFixed(2);
+
                     });
 
                     var data = [];
